@@ -1,0 +1,7 @@
+# Compiled
+lib/
+out/
+
+# Invisible Files
+.DS_Store
+Thumbs.db
