@@ -5,8 +5,38 @@ local load = pcall(load, "") and load or function(chunk, chunkname, mode, env)
 	return setfenv(f, env or _G);
 end
 
-local function parser( file )
+local function ParseTable( tbl )
+	if type(tbl) == "table" then
+		local res = {};
+		res[#res+1] = "{";
+		for k,v in pairs(tbl) do
+			if tonumber(k) then
+				res[#res+1] = ( "[%s]" ):format( k );
+			else
+				res[#res+1] = ( "[%q]" ):format( k );
+			end
+			res[#res+1] = "=";
+			if type(v) == "table" then
+				res[#res+1] = ( "%s" ):format( ParseTable(v) );
+			else
+				res[#res+1] = ( "%q" ):format( v );
+			end
+			res[#res+1] = ",";
+		end
+		res[#res+1] = "}";
+		return table.concat(res, " ");
+	else
+		return tostring(tbl);
+	end
+end
+
+local function parser( file, defines )
 	local lines = {};
+	if type(defines) == "table" then
+		for k,v in pairs(defines) do
+			lines[#lines+1] = ( "local %s = %s;" ):format( k, ParseTable(v) );
+		end
+	end
 	for line in file:lines() do
 		if line:find("^#") then
 			lines[#lines+1] = line:sub( 2 );
@@ -25,9 +55,9 @@ local function parser( file )
 	return table.concat(lines, "\n");
 end
 
-function _M.read( filename )
+function _M.read( filename, defines )
 	local file = io.input( filename );
-	local chunk = parser( file );
+	local chunk = parser( file, defines );
 	io.close( file );
 	return chunk;
 end

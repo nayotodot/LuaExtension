@@ -1,17 +1,17 @@
 local _M = {};
-#if IsLua50 then
+#if UseLua50 then
 local _G = require "_G";
 #end
 local math = require "math";
 local table = require "table";
 
-#if IsLua50 then
+#if UseLua50 or UseLua51 then
 local unpack = _G.unpack;
 #end
 local math_atan2, math_ceil, math_floor, math_random = math.atan2 or math.atan, math.ceil, math.floor, math.random;
-#if IsLua50 then
+#if UseLua50 then
 local table_getn = table.getn;
-#else
+#elseif not UseLua51 then
 local table_unpack = table.unpack;
 #end
 
@@ -33,7 +33,7 @@ end
 
 function _M.hypot( ... )
 	local l = 0;
-#if IsLua50 then
+#if UseLua50 then
 	for i = 1,table_getn(arg) do
 #else
 	local arg = { ... };
@@ -49,7 +49,7 @@ function _M.mod( x, y )
 end
 
 function _M.normalize( ... )
-#if IsLua50 then
+#if UseLua50 then
 	local l = _M.hypot( unpack(arg) );
 	for i = 1,table_getn(arg) do
 #else
@@ -59,7 +59,7 @@ function _M.normalize( ... )
 #end
 		arg[i] = (l == 0.0 and 0) or (arg / l);
 	end
-#if IsLua50 then
+#if UseLua50 or UseLua51 then
 	return unpack(arg), l;
 #else
 	return table_unpack(arg), l;

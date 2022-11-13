@@ -5,7 +5,7 @@ local table = require "table";
 
 local ipairs, next, pairs, tostring, type = _G.ipairs, _G.next, _G.pairs, _G.tostring, _G.type;
 local math_floor, math_random = math.floor, math.random;
-#if IsLua50 then
+#if UseLua50 then
 local table_getn, table_insert = table.getn, table.insert;
 #else
 local table_insert = table.insert;
@@ -140,7 +140,7 @@ function _M.max( tbl, key )
 end
 
 function _M.push( tbl, ... )
-#if not IsLua50 then
+#if not UseLua50 then
 	local arg = { ... };
 #end
 	for i,v in ipairs(arg) do
@@ -150,7 +150,7 @@ function _M.push( tbl, ... )
 end
 
 function _M.reverse( tbl )
-#if IsLua50 then
+#if UseLua50 then
 	local n = table_getn( tbl );
 #else
 	local n = #tbl;
@@ -163,7 +163,7 @@ function _M.reverse( tbl )
 end
 
 function _M.shuffle( tbl )
-#if IsLua50 then
+#if UseLua50 then
 	for i = 2, table_getn(tbl) do
 #else
 	for i = 2, #tbl do
