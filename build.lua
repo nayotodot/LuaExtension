@@ -19,10 +19,10 @@ end
 
 local defines = ParseQuery( arg );
 local Libs = {
-	{ method = "_G",     modname = "extends.base",   input = "src/lua/base.in.lua",   output = "lib/extends/base.lua"   },
-	{ method = "math",   modname = "extends.math",   input = "src/lua/math.in.lua",   output = "lib/extends/math.lua"   },
-	{ method = "string", modname = "extends.string", input = "src/lua/string.in.lua", output = "lib/extends/string.lua" },
-	{ method = "table",  modname = "extends.table",  input = "src/lua/table.in.lua",  output = "lib/extends/table.lua"  },
+	{ method = "_G",     modname = "extends.base",   input = "src/base.in.lua",   output = "lib/extends/base.lua"   },
+	{ method = "math",   modname = "extends.math",   input = "src/math.in.lua",   output = "lib/extends/math.lua"   },
+	{ method = "string", modname = "extends.string", input = "src/string.in.lua", output = "lib/extends/string.lua" },
+	{ method = "table",  modname = "extends.table",  input = "src/table.in.lua",  output = "lib/extends/table.lua"  },
 };
 defines.Libs = Libs;
 
@@ -34,6 +34,6 @@ for i = 1,#Libs do
 end
 
 do
-	local chunk = preproc.read( "src/lua/init.in.lua", defines );
+	local chunk = preproc.read( "src/init.in.lua", defines );
 	preproc.write( "lib/extends/init.lua", chunk );
 end
