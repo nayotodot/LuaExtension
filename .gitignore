@@ -1,5 +1,5 @@
-# Compiled
-lib/
+# Compiled Files
+lib/extends/*.lua
 
 # Invisible Files
 .DS_Store

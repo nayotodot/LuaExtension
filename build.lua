@@ -26,8 +26,6 @@ local Libs = {
 };
 defines.Libs = Libs;
 
-os.execute( "mkdir -p lib/extends/" );
-
 for i = 1,#Libs do
 	local chunk = preproc.read( Libs[i].input, defines );
 	preproc.write( Libs[i].output, chunk );
