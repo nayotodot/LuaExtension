@@ -2,7 +2,7 @@ local _M = {};
 local _G = require "_G";
 local math = require "math";
 
-local getmetatable, next, pairs, setmetatable, type = _G.getmetatable, _G.next, _G.pairs, _G.setmetatable, _G.type;
+local getmetatable, pairs, setmetatable, type = _G.getmetatable, _G.pairs, _G.setmetatable, _G.type;
 local math_abs = math.abs;
 
 function _M.isnil( n )      return type(n) == "nil";      end
@@ -48,27 +48,29 @@ function _M.iif( expr, truepart, falsepart )
 end
 
 function _M.shallowcopy( orig )
-	if _M.istable(orig) then
-		local copy = {};
-		for k,v in pairs(orig) do
-			copy[k] = v;
-		end
-		return copy;
-	else
+	if not _M.istable(orig) then
 		return orig;
 	end
+	local copy = {};
+	for k,v in pairs(orig) do
+		copy[k] = v;
+	end
+	return copy;
 end
 
-function _M.deepcopy( orig )
-	if _M.istable(orig) then
-		local copy = {};
-		for k,v in pairs(orig) do
-			copy[_M.deepcopy(k)] = _M.deepcopy( v );
-		end
-		return setmetatable( copy, _M.deepcopy(getmetatable(orig)) );
-	else
+function _M.deepcopy( orig, memoize )
+	memoize = memoize or {};
+	if not _M.istable(orig) then
 		return orig;
+	elseif memoize[orig] then
+		return memoize[orig];
 	end
+	local copy = {};
+	memoize[orig] = copy;
+	for k,v in pairs(orig) do
+		copy[_M.deepcopy(k, memoize)] = _M.deepcopy( v, memoize );
+	end
+	return setmetatable( copy, _M.deepcopy(getmetatable(orig), memoize) );
 end
 
 return _M;
