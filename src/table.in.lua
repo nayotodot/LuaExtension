@@ -3,13 +3,15 @@ local _G = require "_G";
 local math = require "math";
 local table = require "table";
 
-local ipairs, next, pairs, tostring, type = _G.ipairs, _G.next, _G.pairs, _G.tostring, _G.type;
+local ipairs, next, pairs, setmetatable, tostring, type = _G.ipairs, _G.next, _G.pairs, _G.setmetatable, _G.tostring, _G.type;
 local math_floor, math_random = math.floor, math.random;
 #if UseLua50 then
 local table_getn, table_insert = table.getn, table.insert;
 #else
 local table_insert = table.insert;
 #end
+
+_M.__index = table;
 
 function _M.empty( tbl )
 	return type(tbl) ~= "table" or not next(tbl);
@@ -174,4 +176,4 @@ function _M.shuffle( tbl )
 	return tbl;
 end
 
-return _M;
+return setmetatable( _M, _M );

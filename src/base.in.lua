@@ -5,6 +5,8 @@ local math = require "math";
 local getmetatable, pairs, setmetatable, type = _G.getmetatable, _G.pairs, _G.setmetatable, _G.type;
 local math_abs = math.abs;
 
+_M.__index = _G;
+
 function _M.isnil( n )      return type(n) == "nil";      end
 function _M.isboolean( n )  return type(n) == "boolean";  end
 function _M.isnumber( n )   return type(n) == "number";   end
@@ -73,4 +75,4 @@ function _M.deepcopy( orig, memoize )
 	return setmetatable( copy, _M.deepcopy(getmetatable(orig), memoize) );
 end
 
-return _M;
+return setmetatable( _M, _M );

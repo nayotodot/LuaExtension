@@ -1,9 +1,13 @@
 local _M = {};
+local _G = require "_G";
 local string = require "string";
 local table = require "table";
 
+local setmetatable = _G.setmetatable;
 local string_find, string_sub = string.find, string.sub;
 local table_insert = table.insert;
+
+_M.__index = string;
 
 function _M.split( s, separator, limit )
 	local t = {};
@@ -21,4 +25,4 @@ function _M.split( s, separator, limit )
 	return t;
 end
 
-return _M;
+return setmetatable( _M, _M );

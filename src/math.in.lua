@@ -1,12 +1,12 @@
 local _M = {};
-#if UseLua50 then
 local _G = require "_G";
-#end
 local math = require "math";
 local table = require "table";
 
 #if UseLua50 or UseLua51 then
-local unpack = _G.unpack;
+local setmetatable, unpack = _G.setmetatable, _G.unpack;
+#else
+local setmetatable = _G.setmetatable;
 #end
 local math_atan2, math_ceil, math_floor, math_random = math.atan2 or math.atan, math.ceil, math.floor, math.random;
 #if UseLua50 then
@@ -14,6 +14,8 @@ local table_getn = table.getn;
 #elseif not UseLua51 then
 local table_unpack = table.unpack;
 #end
+
+_M.__index = math;
 
 function _M.angle( x1, y1, x2, y2 )
 	return math_atan2(y2 - y1, x2 - x1);
@@ -93,4 +95,4 @@ function _M.trunc( x )
 	return x < 0 and math_ceil(x) or math_floor(x);
 end
 
-return _M;
+return setmetatable( _M, _M );
